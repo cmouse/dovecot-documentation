@@ -13,3 +13,10 @@ jobs:
       with:
          repo-token: "${{ secrets.GITHUB_TOKEN }}"
          args: "."
+
+  release:
+    needs: build
+    - name: Deploy documentation
+      uses: contention/action-rsync-deploy@v1.0.0
+      secrets: ["DEPLOY_KEY"]
+      args: ["-ar","--delete","_build/","docs@talvi.dovecot.org:/home/docs/public_html"]
