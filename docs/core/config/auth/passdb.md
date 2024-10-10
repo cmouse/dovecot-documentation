@@ -255,7 +255,7 @@ An example [[setting,passdb_sql_query]] would be:
 passdb sql {
   query = SELECT concat(user, '@', domain) AS user, password \
     FROM users \
-    WHERE user = '%n' and domain = '%d'
+    WHERE user = '%{username}' and domain = '%{domain}'
 }
 ```
 
@@ -265,7 +265,7 @@ You can also update "username" and "domain" fields separately:
 passdb sql {
   query = SELECT user AS username, domain, password \
     FROM users \
-    WHERE user = '%n' and domain = '%d'
+    WHERE user = '%{username}' and domain = '%{domain}'
 }
 ```
 
@@ -432,7 +432,7 @@ Import `name=value` to login events.
 ```[dovecot.conf]
 passdb sql {
   query = SELECT userid AS user, password, 'Y' as proxy, host \
-    FROM users WHERE userid = '%u'
+    FROM users WHERE userid = '%{user}'
   }
 }
 ```

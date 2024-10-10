@@ -73,8 +73,8 @@ to add a setting to `dovecot.conf`:
 ```
 protocol lmtp {
   ...
-  # use %n to strip away the domain part
-  auth_username_format = %n
+  # use %{username} to strip away the domain part
+  auth_username_format = %{username}
 }
 ```
 
@@ -119,7 +119,7 @@ this problem by extending the *protocol lmtp* section:
 protocol lmtp {
   ...
   # use %Ln to strip away the domain part
-  auth_username_format = %Lu
+  auth_username_format = %{user|lower}
 }
 ```
 

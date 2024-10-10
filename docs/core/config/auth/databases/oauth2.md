@@ -100,7 +100,7 @@ passdb static {
   fields {
     nopassword = yes
     proxy = yes
-    proxy_mech = %m
+    proxy_mech = %{mech}
     # ...
   }
 }
@@ -113,7 +113,7 @@ oauth2 {
   # ...
   fields {
     proxy = y
-    proxy_mech = %m
+    proxy_mech = %{mech}
   }
 }
 ```

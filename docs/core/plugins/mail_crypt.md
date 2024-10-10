@@ -117,7 +117,7 @@ mail_plugins {
 }
 mail_attribute {
   dict file {
-    path = %h/Maildir/dovecot-attributes
+    path = %{home}/Maildir/dovecot-attributes
   }
 }
 
@@ -137,7 +137,7 @@ mail_plugins {
 }
 mail_attribute {
   dict file {
-    path = %h/Maildir/dovecot-attributes
+    path = %{home}/Maildir/dovecot-attributes
   }
 }
 
@@ -152,7 +152,7 @@ provided via password query:
 passdb sql {
   query = SELECT email as user, password, '%Mw' AS userdb_crypt_user_key_password \
     FROM virtual_users \
-    WHERE email='%u'
+    WHERE email='%{user}'
 }
 ```
 
