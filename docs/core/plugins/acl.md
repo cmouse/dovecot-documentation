@@ -56,6 +56,44 @@ The [[setting,acl_groups]] setting can be dynamically set via
 To enable the IMAP ACL commands, you must load the [[plugin,imap_acl]]. This
 plugin should only be loaded inside a `protocol imap {}` block.
 
+## Named ACL lists
+
+You can use the [[link,settings_groups_includes]] to create named ACL lists.
+
+```[dovecot.conf]
+group @acl_defaults team-a {
+  acl team-a-can-read {
+    id=group=team-a
+    rights=lr
+  }
+  acl admin-can-admin {
+    id=user=admin
+    rights=lrwstipekxa
+  }
+}
+
+group @acl_defaults team-b {
+  acl team-b-can-read {
+    id=group=team-b
+    rights=lr
+  }
+  acl admin-can-admin {
+    id=user=admin
+    rights=lrwstipekxa
+  }
+}
+
+
+namespace public {
+  mailbox team_a/* {
+     @acl_defaults=team-a
+  }
+  mailbox team_b/* {
+     @acl_defaults=team-b
+  }
+}
+```
+
 ### Sample Configuration
 
 ```[dovecot.conf]
