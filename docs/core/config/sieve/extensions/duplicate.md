@@ -54,3 +54,19 @@ if duplicate {
 ```
 
 This example discards duplicate messages based on the default message ID tracking.
+
+## Advanced Sieve Example
+
+```sieve
+require ["duplicate", "fileinto"];
+
+if duplicate :header "Message-ID" {
+  fileinto "Duplicates";
+  stop;
+}
+
+fileinto "Inbox";
+```
+
+This example uses the `Message-ID` header explicitly and files duplicate
+messages into a dedicated mailbox instead of discarding them.
