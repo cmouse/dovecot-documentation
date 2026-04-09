@@ -35,93 +35,15 @@ enabled by default and thus need to be enabled explicitly using
 
 <SettingsComponent tag="sieve-virustest" level="3" />
 
-### Examples
+## Sieve Example
 
-This section shows several configuration examples. Each example shows a
-specimen of valid virus/spam test headers that the given configuration
-will work on.
+```sieve
+require ["spamtest", "fileinto", "relational", "comparator-i;ascii-numeric"];
 
-::: code-group
-```[Spam Header]
-X-Spam-Score: No, score=-3.2
-```
-
-```doveconf[dovecot.conf]
-sieve_extensions {
-  spamtest = yes
-  spamtestplus = yes
-}
-
-sieve_spamtest_status_type = score
-sieve_spamtest_status_header = \
-  X-Spam-Score: [[:alnum:]]+, score=(-?[[:digit:]]+\.[[:digit:]])
-sieve_spamtest_score_max_value = 5.0
-```
-:::
-
-::: code-group
-```[Spam Header]
-X-Spam-Status: Yes
-```
-
-```doveconf[dovecot.conf]
-sieve_extensions {
-  spamtest = yes
-  spamtestplus = yes
-}
-
-sieve_spamtest_status_type = text
-sieve_spamtest_status_header = X-Spam-Status
-sieve_spamtest_text_value {
-  1 = No
-  10 = Yes
+if spamtest :value "ge" :comparator "i;ascii-numeric" "5" {
+  fileinto "Spam";
 }
 ```
-:::
 
-::: code-group
-```[Spam Header]
-X-Spam-Score: sssssss
-```
-
-```doveconf[dovecot.conf]
-sieve_extensions {
-  spamtest = yes
-  spamtestplus = yes
-}
-
-sieve_spamtest_status_header = X-Spam-Score
-sieve_spamtest_status_type = strlen
-sieve_spamtest_score_max_value = 5
-```
-
-::: code-group
-```[Spam Header]
-X-Spam-Score: status=3.2 required=5.0
-```
-
-```[Virus Header]
-X-Virus-Scan: Found to be clean.
-```
-
-```doveconf[dovecot.conf]
-sieve_extensions {
-  spamtest = yes
-  spamtestplus = yes
-  virustest = yes
-}
-
-sieve_spamtest_status_type = score
-sieve_spamtest_status_header = \
-    X-Spam-Score: score=(-?[[:digit:]]+\.[[:digit:]]).*
-sieve_spamtest_score_max_header = \
-    X-Spam-Score: score=-?[[:digit:]]+\.[[:digit:]] required=([[:digit:]]+\.[[:digit:]])
-
-sieve_virustest_status_type = text
-sieve_virustest_status_header = X-Virus-Scan: Found to be (.+)\.
-sieve_virustest_text_value {
-  1 = clean
-  5 = infected
-}
-```
-:::
+This example files messages into the Spam folder when the spam score
+meets or exceeds the configured threshold.
